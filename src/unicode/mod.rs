@@ -12,6 +12,17 @@ const GENERAL_CATEGORY: CodePointMapDataBorrowed<'static, GeneralCategory> =
 pub const EAST_ASIAN_WIDTH: CodePointMapDataBorrowed<'static, EastAsianWidth> =
     maps::east_asian_width();
 
+/// Checks whether the specified codepoint is one of the printable characters
+/// that includes letters, marks, numbers, punctuations, symbols from Unicode
+/// categories L, M, N, P, S, and the ASCII space character.
+///
+/// ```rust
+///    use linebreak::is_print;
+///
+///    assert_eq!(is_print(' '), true);
+///    assert_eq!(is_print('\n'), false);
+///    assert_eq!(is_print('a'), true);
+/// ```
 pub fn is_print(ch: char) -> bool {
     if ch == ' ' {
         // 0x20,SP,SPACE
@@ -44,6 +55,18 @@ pub fn is_print(ch: char) -> bool {
     }
 }
 
+/// Returns the display width of the specified character.
+/// A display width is determined by the Unicode Standard Annex #11 (UAX11)
+/// East-Asian-Width.
+///
+/// ```rust
+///     use linebreak::char_width;
+///
+///     assert_eq!(char_width('\n'), 0);
+///     assert_eq!(char_width(' '), 1);
+///     assert_eq!(char_width('a'), 1);
+///     assert_eq!(char_width('ａ'), 2);
+/// ```
 pub fn char_width(ch: char) -> usize {
     if !is_print(ch) {
         return 0;
@@ -58,6 +81,17 @@ pub fn char_width(ch: char) -> usize {
     }
 }
 
+/// Returns the display width of the specified text.
+/// This function calculates the width of the text taking into account the
+/// letter width determined by the Unicode Standard Annex #11 (UAX11)
+/// East-Asian-Width.
+///
+/// ```rust
+///     use linebreak::text_width;
+///
+///    assert_eq!(text_width("Hello, world!"), 13);
+///    assert_eq!(text_width("こんにちわ、世界！"), 18);
+/// ```
 pub fn text_width(text: &str) -> usize {
     let mut w: usize = 0;
     for ch in text.chars() {

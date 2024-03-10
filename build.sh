@@ -46,11 +46,17 @@ bench() {
   errcheck $?
 }
 
+doc() {
+  cargo doc
+  errcheck $?
+}
+
 if [[ "$#" == "0" ]]; then
   clean
   format
   compile
   test
+  doc
   cover
 
 elif [[ "$1" == "unit" ]]; then
@@ -70,6 +76,9 @@ else
       ;;
     test)
       test
+      ;;
+    doc)
+      doc
       ;;
     cover)
       cover

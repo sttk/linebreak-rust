@@ -8,6 +8,9 @@ use crate::char_buffer::CharBuffer;
 use crate::linebreak::*;
 use crate::unicode::char_width;
 
+/// `LineIter` is the struct that outputs the given string line by line.
+/// This struct can control the overall line width and the indentation from any
+/// desired line.
 pub struct LineIter<'a> {
     scanner: Chars<'a>,
     buffer: CharBuffer,
@@ -21,6 +24,15 @@ pub struct LineIter<'a> {
 }
 
 impl<'a> LineIter<'a> {
+    /// Creates a `LineIter` instance which outputs the given string line by
+    /// line.
+    /// The second argument is the width of the output lines.
+    ///
+    /// ```rust
+    ///    use linebreak::LineIter;
+    ///
+    ///    let mut iter = LineIter::new("...", 80);
+    /// ```
     pub fn new(text: &'a str, line_width: usize) -> LineIter<'a> {
         LineIter {
             scanner: text.chars(),
@@ -35,10 +47,38 @@ impl<'a> LineIter<'a> {
         }
     }
 
+    /// Sets an indentation for the subsequent lines.
+    ///
+    /// ```rust
+    ///     use linebreak::LineIter;
+    ///
+    ///     let mut iter = LineIter::new("abcdefghijklmnopqrstuvwxyz", 10);
+    ///     assert_eq!(iter.next().unwrap(), "abcdefghij");
+    ///     iter.set_indent("    ");
+    ///     assert_eq!(iter.next().unwrap(), "    klmnop");
+    ///     assert_eq!(iter.next().unwrap(), "    qrstuv");
+    ///     assert_eq!(iter.next().unwrap(), "    wxyz");
+    ///     assert_eq!(iter.next().is_none(), true);
+    /// ```
     pub fn set_indent(&mut self, indent: &'a str) {
         self.indent = indent;
     }
 
+    /// Re-initializes with an argument string for reusing this instance.
+    ///
+    /// ```rust
+    ///     use linebreak::LineIter;
+    ///
+    ///     let mut iter = LineIter::new("abcdefghijklmn", 10);
+    ///     assert_eq!(iter.next().unwrap(), "abcdefghij");
+    ///     assert_eq!(iter.next().unwrap(), "klmn");
+    ///     assert_eq!(iter.next().is_none(), true);
+    ///
+    ///     iter.init("opqrstuvwxyz");
+    ///     assert_eq!(iter.next().unwrap(), "opqrstuvwx");
+    ///     assert_eq!(iter.next().unwrap(), "yz");
+    ///     assert_eq!(iter.next().is_none(), true);
+    /// ```
     pub fn init(&mut self, text: &'a str) {
         self.scanner = text.chars();
         self.buffer.clear();
@@ -50,6 +90,21 @@ impl<'a> LineIter<'a> {
         self.has_next = true;
     }
 
+    /// Returns an Option of a line string.
+    /// If there is a line string to be printed, this method returns a
+    /// `Some(String)`, otherwise returns `None.`
+    ///
+    /// ```rust
+    ///     use linebreak::LineIter;
+    ///
+    ///     let text = "The Rust programming language helps you write faster, \
+    ///         more reliable software.";
+    ///     let mut iter = LineIter::new(&text, 30);
+    ///     assert_eq!(iter.next().unwrap(), "The Rust programming language");
+    ///     assert_eq!(iter.next().unwrap(), "helps you write faster, more");
+    ///     assert_eq!(iter.next().unwrap(), "reliable software.");
+    ///     assert_eq!(iter.next().is_none(), true);
+    /// ```
     pub fn next(&mut self) -> Option<String> {
         if !self.has_next {
             return None;

@@ -14,8 +14,10 @@ fn it_should_print_lines() {
     let mut iter = LineIter::new(&text, 80);
     iter.set_indent("_______");
 
-    println!("....:....1....:....2....:....3....:....4....:....5....:....6\
-              ....:....7....:....8");
+    println!(
+        "....:....1....:....2....:....3....:....4....:....5....:....6\
+              ....:....7....:....8"
+    );
     while let Some(line) = iter.next() {
         println!("{}", line);
     }
