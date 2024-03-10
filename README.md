@@ -56,7 +56,7 @@ _______usage) without all the hassle traditionally associated with such control.
 
 This crate supports Rust 1.67.1 or later.
 
-```sh
+```
 % cargo msrv
 Fetching index
 Determining the Minimum Supported Rust Version (MSRV) for toolchain x86_64-apple-darwin
