@@ -59,7 +59,41 @@
 mod char_buffer;
 mod line_iter;
 mod linebreak;
+mod terminal;
 mod unicode;
 
 pub use line_iter::LineIter;
+pub use terminal::Size;
 pub use unicode::{char_width, is_print, text_width};
+
+/// Returns the column number of the current terminal.
+///
+/// If failing to retrieve the column number, this function returns the
+/// tentative value `80`.
+/// This is because this crate would be used on character output terminals,
+/// and errors occure only in special circumstances such as during CI
+/// execution.
+/// In such circumstances, it is assumed that returning a tentative value would
+/// be beneficial than returning an error.
+pub fn term_cols() -> u16 {
+    match terminal::term_cols() {
+        Ok(cols) => cols,
+        Err(_) => 80,
+    }
+}
+
+/// Returns the size of the current terminal.
+///
+/// If failing to retrieve the column number, this function returns the
+/// tentative size `{ col: 80, row: 24 }`.
+/// This is because this crate would be used on character output terminals,
+/// and errors occure only in special circumstances such as during CI
+/// execution.
+/// In such circumstances, it is assumed that returning a tentative value would
+/// be beneficial than returning an error.
+pub fn term_size() -> Size {
+    match terminal::term_size() {
+        Ok(size) => size,
+        Err(_) => Size { col: 80, row: 24 },
+    }
+}
