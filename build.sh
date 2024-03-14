@@ -52,7 +52,7 @@ doc() {
 }
 
 if [[ "$#" == "0" ]]; then
-  clean
+  #clean
   format
   compile
   test
