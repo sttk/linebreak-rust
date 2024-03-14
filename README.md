@@ -8,7 +8,7 @@ In `Cargo.toml`, write this crate as a dependency.
 
 ```toml
 [dependencies]
-linebreak = "0.1.0"
+linebreak = "0.2.0"
 ```
 
 ## Usage
@@ -63,17 +63,17 @@ Determining the Minimum Supported Rust Version (MSRV) for toolchain x86_64-apple
 Using check command cargo check
 
 Check for toolchain '1.66.1-x86_64-apple-darwin' failed with:
-┌───────────────────────────────────────────────────────────────────────────────────────┐
-│ error: package `icu_locid v1.4.0` cannot be built because it requires rustc 1.67 or   │
-│ newer, while the currently active rustc version is 1.66.1                             │
-│ Either upgrade to rustc 1.67 or newer, or use                                         │
-│ cargo update -p icu_locid@1.4.0 --precise ver                                         │
-│ where `ver` is the latest version of `icu_locid` supporting rustc 1.66.1              │
-└───────────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ error: package `icu_list v1.4.0` cannot be built because it requires rustc   │
+│ 1.67 or newer, while the currently active rustc version is 1.66.1            │
+│ Either upgrade to rustc 1.67 or newer, or use                                │
+│ cargo update -p icu_list@1.4.0 --precise ver                                 │
+│ where `ver` is the latest version of `icu_list` supporting rustc 1.66.1      │
+└──────────────────────────────────────────────────────────────────────────────┘
 Check for toolchain '1.71.1-x86_64-apple-darwin' succeeded
 Check for toolchain '1.68.2-x86_64-apple-darwin' succeeded
 Check for toolchain '1.67.1-x86_64-apple-darwin' succeeded
-   Finished The MSRV is: 1.67.1   ██████████████████████████████████████████████ 00:02:18
+   Finished The MSRV is: 1.67.1   █████████████████████████████████████ 00:00:03
 ```
 
 ## License
@@ -85,7 +85,7 @@ See the file LICENSE in this distribution for more details.
 
 
 [repo-url]: https://github.com/sttk/linebreak-rust
-[crateio-img]: https://img.shields.io/badge/crate.io-ver.0.1.0-fc8d62?logo=rust
+[crateio-img]: https://img.shields.io/badge/crate.io-ver.0.2.0-fc8d62?logo=rust
 [crateio-url]: https://crates.io/crates/linebreak
 [docrs-img]: https://img.shields.io/badge/doc.rs-linebreak-66c2a5?logo=docs.rs
 [docrs-url]: https://docs.rs/linebreak
