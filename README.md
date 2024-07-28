@@ -8,7 +8,7 @@ In `Cargo.toml`, write this crate as a dependency.
 
 ```toml
 [dependencies]
-linebreak = "0.2.0"
+linebreak = "0.3.0"
 ```
 
 ## Usage
@@ -85,7 +85,7 @@ See the file LICENSE in this distribution for more details.
 
 
 [repo-url]: https://github.com/sttk/linebreak-rust
-[crateio-img]: https://img.shields.io/badge/crate.io-ver.0.2.0-fc8d62?logo=rust
+[crateio-img]: https://img.shields.io/badge/crate.io-ver.0.3.0-fc8d62?logo=rust
 [crateio-url]: https://crates.io/crates/linebreak
 [docrs-img]: https://img.shields.io/badge/doc.rs-linebreak-66c2a5?logo=docs.rs
 [docrs-url]: https://docs.rs/linebreak

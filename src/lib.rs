@@ -12,7 +12,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! linebreak = "0.1.0"
+//! linebreak = "0.3.0"
 //! ```
 //!
 //! ## Usage
