@@ -10,7 +10,7 @@ use windows::Win32::System::Console::{
     CONSOLE_SCREEN_BUFFER_INFO, COORD, SMALL_RECT, STD_OUTPUT_HANDLE,
 };
 
-pub fn term_cols() -> Result<u16, io::Error> {
+pub fn term_cols() -> Result<usize, io::Error> {
     let mut bi = CONSOLE_SCREEN_BUFFER_INFO {
         dwSize: COORD { X: 0, Y: 0 },
         dwCursorPosition: COORD { X: 0, Y: 0 },
@@ -30,7 +30,7 @@ pub fn term_cols() -> Result<u16, io::Error> {
     };
 
     match unsafe { GetConsoleScreenBufferInfo(h, &mut bi) } {
-        Ok(_) => Ok((bi.srWindow.Right - bi.srWindow.Left + 1) as u16),
+        Ok(_) => Ok((bi.srWindow.Right - bi.srWindow.Left + 1) as usize),
         Err(e) => Err(io::Error::from_raw_os_error(e.code().0)),
     }
 }
@@ -56,8 +56,8 @@ pub fn term_size() -> Result<Size, io::Error> {
 
     match unsafe { GetConsoleScreenBufferInfo(h, &mut bi) } {
         Ok(_) => Ok(Size {
-            col: (bi.srWindow.Right - bi.srWindow.Left + 1) as u16,
-            row: (bi.srWindow.Bottom - bi.srWindow.Top + 1) as u16,
+            col: (bi.srWindow.Right - bi.srWindow.Left + 1) as usize,
+            row: (bi.srWindow.Bottom - bi.srWindow.Top + 1) as usize,
         }),
         Err(e) => Err(io::Error::from_raw_os_error(e.code().0)),
     }

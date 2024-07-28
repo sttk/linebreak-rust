@@ -5,10 +5,10 @@
 use super::Size;
 use std::io;
 
-pub fn term_cols() -> Result<u16, io::Error> {
+pub fn term_cols() -> Result<usize, io::Error> {
     Error::new(ErrorKind::Unsupported)
 }
 
-pub fn term_size() -> Result<u16, io::Error> {
+pub fn term_size() -> Result<usize, io::Error> {
     Error::new(ErrorKind::Unsupported)
 }
