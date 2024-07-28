@@ -75,7 +75,7 @@ pub use unicode::{char_width, is_print, text_width};
 /// execution.
 /// In such circumstances, it is assumed that returning a tentative value would
 /// be beneficial than returning an error.
-pub fn term_cols() -> u16 {
+pub fn term_cols() -> usize {
     match terminal::term_cols() {
         Ok(cols) => cols,
         Err(_) => 80,

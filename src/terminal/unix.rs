@@ -6,7 +6,7 @@ use super::Size;
 use libc::{ioctl, winsize, STDOUT_FILENO, TIOCGWINSZ};
 use std::io;
 
-pub fn term_cols() -> Result<u16, io::Error> {
+pub fn term_cols() -> Result<usize, io::Error> {
     let mut ws = winsize {
         ws_row: 0,
         ws_col: 0,
@@ -15,7 +15,7 @@ pub fn term_cols() -> Result<u16, io::Error> {
     };
     let r = unsafe { ioctl(STDOUT_FILENO, TIOCGWINSZ, &mut ws) };
     match r {
-        0 => Ok(ws.ws_col as u16),
+        0 => Ok(ws.ws_col as usize),
         _ => Err(io::Error::last_os_error()),
     }
 }
@@ -30,8 +30,8 @@ pub fn term_size() -> Result<Size, io::Error> {
     let r = unsafe { ioctl(STDOUT_FILENO, TIOCGWINSZ, &mut ws) };
     match r {
         0 => Ok(Size {
-            col: ws.ws_col as u16,
-            row: ws.ws_row as u16,
+            col: ws.ws_col as usize,
+            row: ws.ws_row as usize,
         }),
         _ => Err(io::Error::last_os_error()),
     }

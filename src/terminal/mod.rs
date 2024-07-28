@@ -6,9 +6,9 @@
 #[derive(Debug)]
 pub struct Size {
     /// The column number of the terminal.
-    pub col: u16,
+    pub col: usize,
     /// The row number of the terminal.
-    pub row: u16,
+    pub row: usize,
 }
 
 #[cfg(unix)]
