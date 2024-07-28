@@ -112,6 +112,37 @@ impl<'a> LineIter<'a> {
 
         let limit = self.limit - self.indent.len();
 
+        if self.width[0] > limit {
+            let mut diff = self.width[0] - limit;
+            self.width[0] = diff;
+            let mut i = self.buffer.len();
+            while i > 0 {
+                i -= 1;
+                if let Some(ch) = self.buffer.get(i) {
+                    let ch_width = char_width(ch);
+                    if diff <= ch_width {
+                        let mut line = self.buffer.substring_trimmed_end(0, i);
+                        self.buffer.cr(i);
+                        if !line.is_empty() {
+                            line.insert_str(0, self.indent);
+                        }
+                        return Some(line);
+                    }
+                    diff -= ch_width;
+                } else {
+                    break;
+                }
+            }
+        } else if self.width[0] == limit {
+            self.width[0] = 0;
+            let mut line = self.buffer.to_string_trimmed_end();
+            self.buffer.cr(0);
+            if !line.is_empty() {
+                line.insert_str(0, self.indent);
+            }
+            return Some(line);
+        }
+
         let mut state = LboState {
             lbo_type: LboType::Never,
             lbo_prev: LboType::Never,
@@ -399,6 +430,37 @@ mod test_of_line_iter {
 
         let opt = iter.next();
         assert!(opt.is_none());
+    }
+
+    #[test]
+    fn test_break_position_after_indent_width_is_increased() {
+        let line_width = 30;
+        let text = "aaaaa ".to_string()
+            + &"b".repeat(line_width - 7)
+            + &"c".repeat(line_width - 7)
+            + "ddd";
+        let indent = " ".repeat(7);
+
+        let mut iter = LineIter::new(&text, line_width);
+        let line = iter.next().unwrap();
+        assert_eq!(line, "aaaaa");
+        assert_eq!(line.len(), 5);
+
+        iter.set_indent(&indent);
+        let line = iter.next().unwrap();
+        assert_eq!(line, "       ".to_string() + &"b".repeat(line_width - 7));
+        assert_eq!(line.len(), 30);
+
+        let line = iter.next().unwrap();
+        assert_eq!(line, "       ".to_string() + &"c".repeat(line_width - 7));
+        assert_eq!(line.len(), 30);
+
+        let line = iter.next().unwrap();
+        assert_eq!(line, "       ddd".to_string());
+        assert_eq!(line.len(), 10);
+
+        let line = iter.next();
+        assert_eq!(line, None);
     }
 
     #[test]

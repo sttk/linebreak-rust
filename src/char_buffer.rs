@@ -48,6 +48,13 @@ impl CharBuffer {
         self.ch_vec.is_empty()
     }
 
+    pub fn get(&self, i: usize) -> Option<char> {
+        if i >= self.ch_vec.len() {
+            return None;
+        }
+        Some(self.ch_vec[i])
+    }
+
     pub fn to_string_trimmed_end(&self) -> String {
         let n = self.ch_vec.len();
         if n > 0 {
@@ -275,5 +282,24 @@ mod test_of_char_buffer {
         assert_eq!(buf.substring_trimmed_end(5, 2), "");
         assert_eq!(buf.substring_trimmed_end(5, 1), "");
         assert_eq!(buf.substring_trimmed_end(4, 0), "");
+    }
+
+    #[test]
+    fn test_get() {
+        let mut buf = CharBuffer::new(5);
+        assert_eq!(buf.add('1'), true);
+        assert_eq!(buf.add('2'), true);
+        assert_eq!(buf.add('3'), true);
+        assert_eq!(buf.add('4'), true);
+        assert_eq!(buf.add('5'), true);
+        assert_eq!(buf.full(), "12345");
+
+        assert_eq!(buf.get(0), Some('1'));
+        assert_eq!(buf.get(1), Some('2'));
+        assert_eq!(buf.get(2), Some('3'));
+        assert_eq!(buf.get(3), Some('4'));
+        assert_eq!(buf.get(4), Some('5'));
+        assert_eq!(buf.get(5), None);
+        assert_eq!(buf.get(6), None);
     }
 }
