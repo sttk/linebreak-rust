@@ -18,6 +18,7 @@ pub struct LineIter<'a> {
     lbo_pos: usize,
     limit: usize,
     indent: &'a str,
+    indent_width: usize,
     open_quot: u8,
     open_apos: u8,
     has_next: bool,
@@ -41,6 +42,7 @@ impl<'a> LineIter<'a> {
             lbo_pos: 0,
             limit: line_width,
             indent: "",
+            indent_width: 0,
             open_quot: 0,
             open_apos: 0,
             has_next: true,
@@ -62,6 +64,7 @@ impl<'a> LineIter<'a> {
     /// ```
     pub fn set_indent(&mut self, indent: &'a str) {
         self.indent = indent;
+        self.indent_width = crate::text_width(indent);
     }
 
     /// Re-initializes with an argument string for reusing this instance.
@@ -110,7 +113,7 @@ impl<'a> LineIter<'a> {
             return None;
         }
 
-        let limit = self.limit - self.indent.len();
+        let limit = self.limit - self.indent_width;
 
         if self.width[0] > limit {
             let mut diff = self.width[0] - limit;
@@ -435,29 +438,70 @@ mod test_of_line_iter {
     #[test]
     fn test_break_position_after_indent_width_is_increased() {
         let line_width = 30;
-        let text = "aaaaa ".to_string()
-            + &"b".repeat(line_width - 7)
-            + &"c".repeat(line_width - 7)
-            + "ddd";
         let indent = " ".repeat(7);
+        let indent_width = crate::text_width(&indent);
+        let text = "aaaaa ".to_string()
+            + &"b".repeat(line_width - indent_width)
+            + &"c".repeat(line_width - indent_width)
+            + "ddd";
 
         let mut iter = LineIter::new(&text, line_width);
         let line = iter.next().unwrap();
         assert_eq!(line, "aaaaa");
-        assert_eq!(line.len(), 5);
+        assert_eq!(crate::text_width(&line), 5);
 
         iter.set_indent(&indent);
-        let line = iter.next().unwrap();
-        assert_eq!(line, "       ".to_string() + &"b".repeat(line_width - 7));
-        assert_eq!(line.len(), 30);
 
         let line = iter.next().unwrap();
-        assert_eq!(line, "       ".to_string() + &"c".repeat(line_width - 7));
-        assert_eq!(line.len(), 30);
+        assert_eq!(line, " ".repeat(7) + &"b".repeat(line_width - indent_width));
+        assert_eq!(crate::text_width(&line), line_width);
 
         let line = iter.next().unwrap();
-        assert_eq!(line, "       ddd".to_string());
-        assert_eq!(line.len(), 10);
+        assert_eq!(line, " ".repeat(7) + &"c".repeat(line_width - indent_width));
+        assert_eq!(crate::text_width(&line), line_width);
+
+        let line = iter.next().unwrap();
+        assert_eq!(line, " ".repeat(7) + "ddd");
+        assert_eq!(crate::text_width(&line), 10);
+
+        let line = iter.next();
+        assert_eq!(line, None);
+    }
+
+    #[test]
+    fn test_break_position_if_indent_contains_full_width_chars() {
+        let line_width = 30;
+        let indent = "__ああ__".to_string(); // width is 8.
+        let indent_width = crate::text_width(&indent);
+        let text = "aaaaa ".to_string()
+            + &"b".repeat(line_width - indent_width)
+            + &"c".repeat(line_width - indent_width)
+            + "ddd";
+
+        let mut iter = LineIter::new(&text, line_width);
+        let line = iter.next().unwrap();
+        assert_eq!(line, "aaaaa");
+        assert_eq!(crate::text_width(&line), 5);
+
+        iter.set_indent(&indent);
+
+        let line = iter.next().unwrap();
+        assert_eq!(
+            line,
+            "__ああ__".to_string() + &"b".repeat(line_width - indent_width)
+        );
+        assert_eq!(crate::text_width(&line), line_width);
+
+        let line = iter.next().unwrap();
+        assert_eq!(
+            line,
+            "__ああ__".to_string() + &"c".repeat(line_width - indent_width)
+        );
+        assert_eq!(crate::text_width(&line), line_width);
+
+        let line = iter.next().unwrap();
+        assert_eq!(line, "__ああ__ddd");
+        assert_eq!(crate::text_width(&line), 11);
 
         let line = iter.next();
         assert_eq!(line, None);
