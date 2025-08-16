@@ -1,4 +1,4 @@
-# [linebreak-rust][repo-url] [![crate.io][crateio-img]][crateio-url] [![doc.rs][docrs-img]][docrs-url] [![CI Status][ci-img]][ci-url] [![MIT License][mit-img]][mit-url]
+# [linebreak for Rust][repo-url] [![crates.io][cratesio-img]][cratesio-url] [![doc.rs][docrs-img]][docrs-url] [![CI Status][ci-img]][ci-url] [![MIT License][mit-img]][mit-url]
 
 A library for breaking a given text into lines within a specified width. This library also supports per-line indentation.
 
@@ -54,42 +54,36 @@ _______usage) without all the hassle traditionally associated with such control.
 
 ## Supporting Rust versions
 
-This crate supports Rust 1.67.1 or later.
+This crate supports Rust 1.81.0 or later.
 
-```
-% cargo msrv
-Fetching index
-Determining the Minimum Supported Rust Version (MSRV) for toolchain x86_64-apple-darwin
-Using check command cargo check
-
-Check for toolchain '1.66.1-x86_64-apple-darwin' failed with:
-┌──────────────────────────────────────────────────────────────────────────────┐
-│ error: package `icu_list v1.4.0` cannot be built because it requires rustc   │
-│ 1.67 or newer, while the currently active rustc version is 1.66.1            │
-│ Either upgrade to rustc 1.67 or newer, or use                                │
-│ cargo update -p icu_list@1.4.0 --precise ver                                 │
-│ where `ver` is the latest version of `icu_list` supporting rustc 1.66.1      │
-└──────────────────────────────────────────────────────────────────────────────┘
-Check for toolchain '1.71.1-x86_64-apple-darwin' succeeded
-Check for toolchain '1.68.2-x86_64-apple-darwin' succeeded
-Check for toolchain '1.67.1-x86_64-apple-darwin' succeeded
-   Finished The MSRV is: 1.67.1   █████████████████████████████████████ 00:00:03
+```sh
+% ./build.sh msrv
+    Updating crates.io index
+     Locking 0 packages to latest compatible versions
+note: pass `--verbose` to see 2 unchanged dependencies behind latest
+  [Meta]   cargo-msrv 0.18.4
+        ~~~~~~(omission)~~~~~
+Result:
+   Considered (min … max):   Rust 1.56.1 … Rust 1.89.0
+   Search method:            bisect
+   MSRV:                     1.81.0
+   Target:                   x86_64-apple-darwin
 ```
 
 ## License
 
-Copyright (C) 2024 Takayuki Sato
+Copyright (C) 2024-2025 Takayuki Sato
 
 This program is free software under MIT License.<br>
 See the file LICENSE in this distribution for more details.
 
 
 [repo-url]: https://github.com/sttk/linebreak-rust
-[crateio-img]: https://img.shields.io/badge/crate.io-ver.0.3.1-fc8d62?logo=rust
-[crateio-url]: https://crates.io/crates/linebreak
+[cratesio-img]: https://img.shields.io/badge/crates.io-ver.0.3.1-fc8d62?logo=rust
+[cratesio-url]: https://crates.io/crates/linebreak
 [docrs-img]: https://img.shields.io/badge/doc.rs-linebreak-66c2a5?logo=docs.rs
 [docrs-url]: https://docs.rs/linebreak
 [ci-img]: https://github.com/sttk/linebreak-rust/actions/workflows/rust.yml/badge.svg?branch=main
-[ci-url]: https://github.com/sttk/linebreak-rust/actions
+[ci-url]: https://github.com/sttk/linebreak-rust/actions?query=branch%3Amain
 [mit-img]: https://img.shields.io/badge/license-MIT-green.svg
 [mit-url]: https://opensource.org/licenses/MIT
